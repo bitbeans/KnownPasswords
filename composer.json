@@ -1,6 +1,9 @@
 {
     "name": "bitbeans/knownpasswords",
     "description": "Laravel 5.x package to access the knownpasswords.org API",
+    "keywords": ["passwords", "knownpasswords", "laravel", "laravel5"],
+    "license": "MIT",
+    "version": "1.0.0",
     "authors": [
         {
             "name": "Christian Hermann",
@@ -9,9 +12,8 @@
             "role": "Developer"
         }
     ],
-    "minimum-stability": "dev",
     "require": {
-        "php": ">=5.6.0",        
+        "php": ">=5.4.0",        
         "illuminate/support": "~5"
     },
     "autoload": {
@@ -19,4 +21,5 @@
             "Bitbeans\\KnownPasswords\\": "src/"
         }
     },
+    "minimum-stability": "dev"
 }
