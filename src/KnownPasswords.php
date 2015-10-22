@@ -85,6 +85,28 @@ class KnownPasswords {
 			throw new \Exception('HTTPS requested while Curl not compiled with SSL');
 		}
 	}
+	
+	private function get_headers_from_curl_response($headerContent)
+	{
+		$headers = array();
+		// Split the string on every "double" new line.
+		$arrRequests = explode("\r\n\r\n", $headerContent);
+		// Loop of response headers. The "count() -1" is to 
+		//avoid an empty row for the extra line break before the body of the response.
+		for ($index = 0; $index < count($arrRequests) -1; $index++) {
+			foreach (explode("\r\n", $arrRequests[$index]) as $i => $line)
+			{
+				if ($i === 0)
+					$headers[$index]['http_code'] = $line;
+				else
+				{
+					list ($key, $value) = explode(': ', $line);
+					$headers[$index][$key] = $value;
+				}
+			}
+		}
+		return $headers;
+	}
 
 	/**
 	 * Check if a password is known by the knownpassword.org API.
@@ -161,7 +183,7 @@ class KnownPasswords {
 		} 
 		$header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
 		$header = substr($result, 0, $header_size);
-		$headers = get_headers_from_curl_response($header);
+		$headers = $this->get_headers_from_curl_response($header);
 		if ((array_key_exists("http_code", $headers[0])) && (array_key_exists("X-Powered-By", $headers[0])) && (array_key_exists("X-Signature", $headers[0]))) {
 			$httpCode = $headers[0]["http_code"];
 			$responsePowered = $headers[0]["X-Powered-By"];
